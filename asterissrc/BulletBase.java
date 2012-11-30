@@ -36,10 +36,24 @@ public BulletBase(int startx, int starty, int startw, int starth, String dir)
 
 public void move()
 {
-	if (direction == "left")
+	if (direction == "left") {
 		moveleft();
-	else if (direction == "right")
+		moveleft();
+		moveleft();
+		moveleft();
+		moveleft();
+		moveleft();
+		moveleft();
+	}
+	else if (direction == "right") {
 		moveright();
+		moveright();
+		moveright();
+		moveright();
+		moveright();
+		moveright();
+		moveright();
+	}
 }
 
 public void moveleft()
