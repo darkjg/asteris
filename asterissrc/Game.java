@@ -141,6 +141,17 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	}
     }	
 
+    //garbage collect bullets which are offscreen
+    public void DoGarbageCollectBullets()
+    {
+	for (int i = 0; i < bullets.size(); i++) {
+		Object o = bullets.get(i);
+		Bullet bo = (Bullet)o;
+		if (bo.getx() < 0 || bo.getx() > SCREENWIDTH)
+			bullets.remove(i);
+	}
+    }	
+
 
 /*
  * Drawing
@@ -175,6 +186,8 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
       DrawBullets(g2d);
       DrawPlayer(g2d);
       DoFallDown();
+
+	DoGarbageCollectBullets();
 
       boolean b = DoBulletCollision();
 
@@ -236,7 +249,7 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	   	if (key == KeyEvent.VK_DOWN) {
 		}	
 	   	if (key == KeyEvent.VK_X) {
-			Bullet b = new Bullet(player.getx(),player.gety(),20,20,player.getdirection());
+			Bullet b = new Bullet(player.getx()+player.getw()/2,player.gety()+5,20,20,player.getdirection());
 			bullets.add(b);
 	   	}
 	   	if (key == KeyEvent.VK_Z) {//go back to history of talkmodes
