@@ -23,18 +23,32 @@ import java.awt.event.KeyEvent;
 
 import java.util.*;
 
-class Bullet extends BulletBase
+class BulletBase extends BoundingBox
 {
-protected String fileprefix = "./pics/";
-protected Image bulletimage = new ImageIcon(fileprefix+"bullet-20x20-1.png").getImage();
-public Bullet(int startx, int starty, int startw, int starth, String dir)
+protected String direction = "left";
+public BulletBase(int startx, int starty, int startw, int starth, String dir)
 {
-	super(startx,starty,startw,starth,dir);
-	/////bulletimage = new ImageIcon(fileprefix+"bullet-20x20-1.png").getImage();
+	super(startx,starty,startw,starth);
+
+	direction = dir;
+	
 }
 
-public Image getImage()
+public void move()
 {
-	return bulletimage;
+	if (direction == "left")
+		moveleft();
+	else if (direction == "right")
+		moveright();
+}
+
+public void moveleft()
+{
+	mapx--;
+}
+
+public void moveright()
+{
+	mapx++;
 }
 };

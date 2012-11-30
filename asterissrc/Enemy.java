@@ -23,7 +23,7 @@ import java.awt.event.KeyEvent;
 
 import java.util.*;
 
-class Player
+class Enemy 
 {
 protected int hitpoints = 10;
 protected int maxhitpoints = 10;
@@ -34,7 +34,7 @@ private int x, y, w, h;
 private boolean moving  = false;
 protected StateImageLibrary staticleftimages = new StateImageLibrary();
 protected StateImageLibrary staticrightimages = new StateImageLibrary();
-public Player(int startx, int starty, int startw, int starth)
+public Enemy(int startx, int starty, int startw, int starth)
 {
 	direction = "right";
 

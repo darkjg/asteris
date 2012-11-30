@@ -41,6 +41,8 @@ private int SCREENWIDTH = 320;
 private int SCREENHEIGHT = 200;
 private Player player = new Player(100,100,40,40);
 private LinkedList boundingboxes = new LinkedList();
+private LinkedList bullets = new LinkedList();
+private LinkedList enemies = new LinkedList();
 ///private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x200-1.png").getImage());
 private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x200-1.png").getImage());
     public Game() {
@@ -98,6 +100,25 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
                 return false;
     }
 
+    public boolean DoBulletCollision()
+    {
+	
+	for (int i = 0; i < bullets.size(); i++) {
+		Object oo = bullets.get(i);
+		Bullet bo = (Bullet)oo;
+		for (int j = 0; j < enemies.size(); j++) {
+			Object o = enemies.get(j);
+			Enemy e = (Enemy)o;
+			if (collision(bo.getx(),bo.gety(),bo.getw(),bo.geth(),e.getx(),e.gety(),e.getw(),e.geth())) {//FIXME enemy instaed of player x and gety
+				return true;
+			}
+		}
+	}
+
+	return false;
+
+    }
+
     public void DoFallDown()
     {
 	
@@ -111,9 +132,29 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	player.fall();
     }
 
+    public void DoMoveBullets()
+    {
+	for (int i = 0; i < bullets.size(); i++) {
+		Object o = bullets.get(i);
+		Bullet bo = (Bullet)o;
+		bo.move();
+	}
+    }	
+
+
 /*
  * Drawing
  */ 
+    public void DrawBullets(Graphics2D g2d)
+    {
+	for (int i = 0; i < bullets.size(); i++) {
+		Object o = bullets.get(i);
+		Bullet bo = (Bullet)o;
+		g2d.drawImage(bo.getImage(), bo.getx(), bo.gety(), this);
+	}
+    }	
+
+
 
     public void DrawPlayer(Graphics2D g2d) {
 	g2d.drawImage(player.getImage(), player.getx(), player.gety(), this);
@@ -131,8 +172,13 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
       g2d.fillRect(0, 0, 320, 200);
 
       DrawMap(g2d);
+      DrawBullets(g2d);
       DrawPlayer(g2d);
       DoFallDown();
+
+      boolean b = DoBulletCollision();
+
+	DoMoveBullets();
 
 	//g2d.drawImage("pics/player-right-40x40-1.png",100,100,this);
       Toolkit.getDefaultToolkit().sync();
@@ -190,7 +236,8 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	   	if (key == KeyEvent.VK_DOWN) {
 		}	
 	   	if (key == KeyEvent.VK_X) {
-
+			Bullet b = new Bullet(player.getx(),player.gety(),20,20,player.getdirection());
+			bullets.add(b);
 	   	}
 	   	if (key == KeyEvent.VK_Z) {//go back to history of talkmodes
 	   	}
