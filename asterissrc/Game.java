@@ -111,7 +111,7 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	for (int i = 0; i < gateways.size(); i++) {
 		Object o = gateways.get(i);
 		Gateway bo = (Gateway)o;
-		if (collision(player.getx(),player.gety(),player.getw(),player.geth(),bo.getx(),bo.gety(),bo.getw(),bo.geth())) {
+		if (collision(player.getx()-map.getx(),player.gety()-map.gety(),player.getw(),player.geth(),bo.getx(),bo.gety(),bo.getw(),bo.geth())) {
 
 			currentgateway = bo;
 
@@ -197,7 +197,7 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 	for (int i = 0; i < gateways.size(); i++) {
 		Object o = gateways.get(i);
 		Gateway bo = (Gateway)o;
-		g2d.drawImage(bo.getImage(), bo.getx(), bo.gety(), this);
+		g2d.drawImage(bo.getImage(), bo.getx()+map.getx(), bo.gety()+map.gety(), this);
 	}
     }	
 
