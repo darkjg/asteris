@@ -151,21 +151,36 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 
 	   	if (key == KeyEvent.VK_LEFT) {
 			player.settomoving();
-			if (map.getx() > 0 
-				|| 
-				player.getx() < SCREENWIDTH/2 
-				||
-				player.getx() > SCREENWIDTH/2) {	
-				player.moveleft();
-			} else {
+			if (map.getx() >= 0) {
+				if (player.getx() < SCREENWIDTH/2 +1) { 
+					player.moveleft();
+				}
+			}
+			else if (map.getx() < - map.getw() + SCREENWIDTH+1) {
+				if (player.getx() > SCREENWIDTH/2 +1) { 
+					player.moveleft();
+				} else {
+					map.moveright();
+				}
+			}
+			 else {
 				map.moveright();
 			}
+
 	   	}
 	   	if (key == KeyEvent.VK_RIGHT) {
 			player.settomoving();
-			if (map.getx() < - map.getw() + SCREENWIDTH || player.getx() > SCREENWIDTH/2 || player.getx() < SCREENWIDTH/2) {
-				player.moveright();
-			} else {
+			if (map.getx() >= 0) {
+				if (player.getx() < SCREENWIDTH/2 +1) {
+					player.moveright();
+				} else {
+					map.moveleft();
+				}
+			}
+			else if (map.getx() < - map.getw() + SCREENWIDTH+1) { 
+					player.moveright();
+			 
+			}  else {
 				map.moveleft();
 			}
 	   	}
