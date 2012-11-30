@@ -41,6 +41,8 @@ private int SCREENWIDTH = 320;
 private int SCREENHEIGHT = 200;
 private Player player = new Player(100,100,40,40);
 private LinkedList boundingboxes = new LinkedList();
+private LinkedList gateways = new LinkedList();
+private Gateway currentgateway;//FIXME default value
 private LinkedList bullets = new LinkedList();
 private LinkedList enemies = new LinkedList();
 ///private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x200-1.png").getImage());
@@ -58,7 +60,7 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
         timer = new Timer(40, this);
         timer.start();
 
-	loadlevel1();
+	loadlevel1000();
 
     }
 
@@ -67,10 +69,29 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
         GameInit();
     }
 
-    public void loadlevel1()
+    public void loadlevel1000()
     {
-	///boundingboxes.add(new BoundingBox(0,160,200,50));
-	boundingboxes.add(new BoundingBox(-1000,160,2000,50));
+	gateways.clear();
+	bullets.clear();
+	enemies.clear();
+	boundingboxes.clear();	
+
+	map = new Map(0,0,400,200,new ImageIcon(fileprefix+"map-level1-400x200-1.png").getImage());
+	boundingboxes.add(new BoundingBox(0,160,400,6));
+	///boundingboxes.add(new BoundingBox(-1000,160,2000,50));
+	gateways.add(new Gateway(200,160-48,48,48,new ImageIcon(fileprefix+"door-48x48-1.png").getImage(),100,0,2000));
+    }
+
+    public void loadlevel2000()
+    {
+	gateways.clear();
+	bullets.clear();
+	enemies.clear();
+	boundingboxes.clear();	
+	map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level2-320x200-1.png").getImage());
+	boundingboxes.add(new BoundingBox(0,160,400,6));
+	///boundingboxes.add(new BoundingBox(-1000,160,2000,50));
+	//gateways.add(new Gateway(400-48,160-48,48,48,new ImageIcon(fileprefix+"gateways-48x48-1.png").getImage(),100,0));
     }
 
     public void GameInit() {
@@ -85,6 +106,21 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 /*
  * Collision detection code
  */
+    public boolean DoGatewayCollision()
+    {
+	for (int i = 0; i < gateways.size(); i++) {
+		Object o = gateways.get(i);
+		Gateway bo = (Gateway)o;
+		if (collision(player.getx(),player.gety(),player.getw(),player.geth(),bo.getx(),bo.gety(),bo.getw(),bo.geth())) {
+
+			currentgateway = bo;
+
+			return true;
+		}
+	}
+	return false;
+    }	
+
 
     public boolean collisionforfall(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
         if (x1 > x2 && y1 + h1 > y2 && x1 < x2 + w2 && y1 < y2 + h2)//FIXME
@@ -156,6 +192,15 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
 /*
  * Drawing
  */ 
+    public void DrawGateways(Graphics2D g2d)
+    {
+	for (int i = 0; i < gateways.size(); i++) {
+		Object o = gateways.get(i);
+		Gateway bo = (Gateway)o;
+		g2d.drawImage(bo.getImage(), bo.getx(), bo.gety(), this);
+	}
+    }	
+
     public void DrawBullets(Graphics2D g2d)
     {
 	for (int i = 0; i < bullets.size(); i++) {
@@ -183,15 +228,31 @@ private Map map = new Map(0,0,400,2000,new ImageIcon(fileprefix+"map-level1-320x
       g2d.fillRect(0, 0, 320, 200);
 
       DrawMap(g2d);
+      DrawGateways(g2d);
       DrawBullets(g2d);
       DrawPlayer(g2d);
       DoFallDown();
 
 	DoGarbageCollectBullets();
 
-      boolean b = DoBulletCollision();
+      boolean bulletcollision = DoBulletCollision();
+    
+      boolean gatewaycollision = DoGatewayCollision();
+      if (gatewaycollision) {
+	switch(currentgateway.getnewlevel()) {
+		case 1000:
+			loadlevel1000();
+			break;
+		case 2000:
+			loadlevel2000();
+			break;
+		default:
+			loadlevel1000();
+			break;
+		}
+	}
 
-	DoMoveBullets();
+      DoMoveBullets();
 
 	//g2d.drawImage("pics/player-right-40x40-1.png",100,100,this);
       Toolkit.getDefaultToolkit().sync();
