@@ -68,6 +68,16 @@ public int gety()
 	return mapy;
 }
 
+public int getw()
+{
+	return mapw;
+}
+
+public int geth()
+{
+	return maph;
+}
+
 public void moveleft() 
 {
 	mapx-=5;

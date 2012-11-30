@@ -37,12 +37,13 @@ import java.util.Random;
 
 public class Game extends JPanel implements ActionListener {
 private String fileprefix = "./pics/";
+private int SCREENWIDTH = 320;
+private int SCREENHEIGHT = 200;
 private Player player = new Player(100,100,40,40);
 private LinkedList boundingboxes = new LinkedList();
 private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x200-1.png").getImage());
+////private Map map = new Map(0,0,3200,2000,new ImageIcon(fileprefix+"map-level1-320x200-1.png").getImage());
     public Game() {
-
-	
 	
 	Timer timer;
 
@@ -66,7 +67,8 @@ private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x2
 
     public void loadlevel1()
     {
-	boundingboxes.add(new BoundingBox(0,160,200,50));
+	///boundingboxes.add(new BoundingBox(0,160,200,50));
+	boundingboxes.add(new BoundingBox(-1000,160,2000,50));
     }
 
     public void GameInit() {
@@ -149,11 +151,19 @@ private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x2
 
 	   	if (key == KeyEvent.VK_LEFT) {
 			player.settomoving();
-			player.moveleft();
+			if (map.getx() > 0) {
+				player.moveleft();
+			} else {
+				map.moveright();
+			}
 	   	}
 	   	if (key == KeyEvent.VK_RIGHT) {
 			player.settomoving();
-			player.moveright();
+			if (map.getx() < - map.getw() + SCREENWIDTH) {
+				player.moveright();
+			} else {
+				map.moveleft();
+			}
 	   	}
 	   	if (key == KeyEvent.VK_UP) {
 
