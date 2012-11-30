@@ -140,6 +140,7 @@ private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x2
 
     class TAdapter extends KeyAdapter {
         public void keyReleased(KeyEvent e) {
+		player.settonotmoving();
 	} 
       
         public void keyPressed(KeyEvent e) {
@@ -147,11 +148,11 @@ private Map map = new Map(0,0,320,200,new ImageIcon(fileprefix+"map-level1-320x2
           int key = e.getKeyCode();
 
 	   	if (key == KeyEvent.VK_LEFT) {
-			//map.moveright();
+			player.settomoving();
 			player.moveleft();
 	   	}
 	   	if (key == KeyEvent.VK_RIGHT) {
-			//map.moveleft();
+			player.settomoving();
 			player.moveright();
 	   	}
 	   	if (key == KeyEvent.VK_UP) {

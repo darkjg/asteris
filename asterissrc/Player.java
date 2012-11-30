@@ -29,9 +29,11 @@ protected int hitpoints = 10;
 protected int maxhitpoints = 10;
 protected StateImageLibrary rightimages = new StateImageLibrary();
 protected StateImageLibrary leftimages = new StateImageLibrary();
-String direction = "right";//left right stop
+private String direction = "right";//left right stop
 private int x, y, w, h;
-
+private boolean moving  = false;
+protected StateImageLibrary staticleftimages = new StateImageLibrary();
+protected StateImageLibrary staticrightimages = new StateImageLibrary();
 public Player(int startx, int starty, int startw, int starth)
 {
 	direction = "right";
@@ -42,6 +44,10 @@ public Player(int startx, int starty, int startw, int starth)
 	w = startw;
 	h = starth;
 
+	staticleftimages.addImage("player-left-static-40x40-1.png");
+	staticrightimages.addImage("player-right-static-40x40-1.png");
+
+	addLeftImage("player-left-40x40-1.png");
 	addLeftImage("player-left-40x40-1.png");
 	addLeftImage("player-left-40x40-2.png");
 	addLeftImage("player-left-40x40-3.png");
@@ -78,12 +84,19 @@ public void addRightImage(String leftimage)
 
 public Image getImage()
 {
-	if (direction == "right")
-		return rightimages.getImage();
-	else if (direction == "left")
-		return leftimages.getImage();
+	if (direction == "left") {
+		if (!moving)
+			return staticleftimages.getImage();
+		else
+			return leftimages.getImage();
+	} else if (direction == "right") {
+		if (!moving)
+			return staticrightimages.getImage();
+		else 
+			return rightimages.getImage();
+	}
 
-	return rightimages.getImage();
+	return rightimages.getImage(2);
 }
 
 public int getx()
@@ -121,6 +134,16 @@ public void moveright()
 {
 	direction = "right";
 	x+=5;
+}
+
+public void settomoving()
+{
+	moving = true;
+}
+
+public void settonotmoving()
+{
+	moving = false;
 }
 
 };
